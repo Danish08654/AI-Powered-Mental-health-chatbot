@@ -192,7 +192,23 @@ CRISIS_WORDS = [
 for key, default in [("messages", []), ("show_crisis", False), ("msg_count", 0)]:
     if key not in st.session_state:
         st.session_state[key] = default
+# ─────────────────────────────────────────
+# Sidebar
+# ─────────────────────────────────────────
+with st.sidebar:
+    st.markdown("### ⚙️ Settings")
 
+    temperature = st.slider(
+        "Response warmth", 0.3, 1.0, 0.72, 0.05,
+        help="Higher = more expressive and creative responses"
+    )
+
+    st.markdown("---")
+    if st.button("🗑 Clear conversation"):
+        st.session_state.messages = []
+        st.session_state.show_crisis = False
+        st.session_state.msg_count = 0
+        st.rerun()
 # ─────────────────────────────────────────
 # Groq API call
 # ─────────────────────────────────────────
