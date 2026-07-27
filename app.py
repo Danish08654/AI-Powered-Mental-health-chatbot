@@ -229,14 +229,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── Crisis banner ──
-if st.session_state.show_crisis:
-    st.markdown("""<div class="crisis-bar">
-      If you're in crisis, please reach out now.
-      <strong>Call or text 988</strong> (US Suicide & Crisis Lifeline) &nbsp;·&nbsp;
-      Text <strong>HOME to 741741</strong> (Crisis Text Line).
-      You matter and support is available right now.
-    </div>""", unsafe_allow_html=True)
 
 # ── Chat area ──
 if not st.session_state.messages:
@@ -271,20 +263,6 @@ if selected_mood:
 if send and user_input and user_input.strip():
     process_message(user_input.strip())
 
-# ── Quick starters (empty state only) ──
-if not st.session_state.messages:
-    st.markdown('<div class="starter-wrap">', unsafe_allow_html=True)
-    starters = [
-        "I've been feeling anxious and can't slow my thoughts down",
-        "I feel lonely and disconnected from the people around me",
-        "I'm exhausted but can't sleep — stress keeps me up",
-        "I want to learn some calming techniques",
-        "I've been feeling low and unmotivated for a while",
-    ]
-    for s in starters:
-        if st.button(s, key=f"st_{s[:20]}"):
-            process_message(s)
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # ── Footer ──
 st.markdown("""<div class="footer">
