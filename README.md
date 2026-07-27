@@ -1,14 +1,18 @@
 #  Mental Health Support Chatbot (LLM)
 
-A fine-tuned AI chatbot that provides empathetic responses for mental health support using NLP and Hugging Face Transformers.
+A fine-tuned AI chatbot that provides empathetic responses for mental health support using simple Plain English text.
+
+----
 
 ##  Features
 
-1) Fine-tuned DistilGPT2 model
+1)  Fine-tuned DistilGPT2 model
 2)  Empathetic conversational responses
 3)  Trained on EmpatheticDialogues dataset
 4)  Interactive UI using Streamlit
 5)  Real-time chat experience
+
+----
 
 ##  Tech Stack
 
@@ -17,13 +21,19 @@ A fine-tuned AI chatbot that provides empathetic responses for mental health sup
 3) Streamlit
 4) PyTorch
 
+-----
 
 ##  Model Details
 
 1) Base Model: DistilGPT2
 2) Dataset: EmpatheticDialogues
 3) Training: Hugging Face Trainer API
-4) Task: Text Generation (Conversational AI)
+4) Conversational AI
+
+-----
    
-## Run
-streamlit run app.py
+# Author
+
+Danish Zulfiqar
+
+-----
