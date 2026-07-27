@@ -256,10 +256,6 @@ with col_input:
 with col_btn:
     send = st.button("Send")
 
-if selected_mood:
-    user_input = f"I'm feeling {selected_mood} today"
-    send = True
-
 if send and user_input and user_input.strip():
     process_message(user_input.strip())
 
