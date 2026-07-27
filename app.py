@@ -2,18 +2,14 @@ import streamlit as st
 import requests
 import time
 
-# ─────────────────────────────────────────
 # Page config
-# ─────────────────────────────────────────
 st.set_page_config(
-    page_title="MindEase – Mental Health Support",
+    page_title="Mental Health Support",
     page_icon="🌿",
     layout="centered"
 )
 
-# ─────────────────────────────────────────
 # Custom CSS
-# ─────────────────────────────────────────
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Serif+Display&display=swap');
@@ -196,49 +192,6 @@ CRISIS_WORDS = [
 for key, default in [("messages", []), ("show_crisis", False), ("msg_count", 0)]:
     if key not in st.session_state:
         st.session_state[key] = default
-
-# ─────────────────────────────────────────
-# Sidebar
-# ─────────────────────────────────────────
-with st.sidebar:
-    st.markdown("### ⚙️ Settings")
-
-    # API key — prefer secrets, allow manual override
-    if GROQ_API_KEY:
-        st.success("✅ API key loaded from secrets")
-        active_key = GROQ_API_KEY
-    else:
-        manual_key = st.text_input(
-            "Groq API Key", type="password",
-            placeholder="gsk_…",
-            help="Add to .streamlit/secrets.toml as GROQ_API_KEY or enter here"
-        )
-        active_key = manual_key if manual_key else None
-        if not active_key:
-            st.warning("Enter your Groq API key to start chatting.")
-
-    model_label = st.selectbox("Model", list(MODELS.keys()), index=0)
-    model_id = MODELS[model_label]
-
-    temperature = st.slider(
-        "Response warmth", 0.3, 1.0, 0.72, 0.05,
-        help="Higher = more expressive and creative responses"
-    )
-
-    st.markdown("---")
-    st.markdown("### 🆘 Crisis Resources")
-    st.markdown("""
-- **988** — Suicide & Crisis Lifeline *(call or text)*  
-- **741741** — Crisis Text Line *(text HOME)*  
-- **911** — Emergencies  
-- [International crisis centres](https://www.iasp.info/resources/Crisis_Centres/)
-    """)
-    st.markdown("---")
-    if st.button("🗑 Clear conversation"):
-        st.session_state.messages = []
-        st.session_state.show_crisis = False
-        st.session_state.msg_count = 0
-        st.rerun()
 
 # ─────────────────────────────────────────
 # Groq API call
