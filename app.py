@@ -229,15 +229,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── Mood chips ──
-moods = ["Sad", "Anxious", "Frustrated", "Overwhelmed", "Numb", "Hopeful"]
-mood_cols = st.columns(len(moods))
-selected_mood = None
-for i, mood in enumerate(moods):
-    with mood_cols[i]:
-        if st.button(mood, key=f"mood_{i}", use_container_width=True):
-            selected_mood = mood
-
 # ── Crisis banner ──
 if st.session_state.show_crisis:
     st.markdown("""<div class="crisis-bar">
