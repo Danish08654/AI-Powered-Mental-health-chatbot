@@ -221,28 +221,9 @@ def process_message(text):
 st.markdown("""
 <div class="hero">
   <span class="hero-leaf">🌿</span>
-  <h1>MindEase</h1>
-  <p>A safe, judgment-free space to share what you're carrying.</p>
-</div>
+  <h1>Welcome back to Mental Support</h1>
+  </div>
 """, unsafe_allow_html=True)
-
-# ── Mood chips ──
-moods = ["Sad", "Anxious", "Frustrated", "Overwhelmed", "Numb", "Hopeful"]
-mood_cols = st.columns(len(moods))
-selected_mood = None
-for i, mood in enumerate(moods):
-    with mood_cols[i]:
-        if st.button(mood, key=f"mood_{i}", use_container_width=True):
-            selected_mood = mood
-
-# ── Crisis banner ──
-if st.session_state.show_crisis:
-    st.markdown("""<div class="crisis-bar">
-      If you're in crisis, please reach out now.
-      <strong>Call or text 988</strong> (US Suicide & Crisis Lifeline) &nbsp;·&nbsp;
-      Text <strong>HOME to 741741</strong> (Crisis Text Line).
-      You matter and support is available right now.
-    </div>""", unsafe_allow_html=True)
 
 # ── Chat area ──
 if not st.session_state.messages:
@@ -276,23 +257,3 @@ if selected_mood:
 
 if send and user_input and user_input.strip():
     process_message(user_input.strip())
-
-# ── Quick starters (empty state only) ──
-if not st.session_state.messages:
-    st.markdown('<div class="starter-wrap">', unsafe_allow_html=True)
-    starters = [
-        "I've been feeling anxious and can't slow my thoughts down",
-        "I feel lonely and disconnected from the people around me",
-        "I'm exhausted but can't sleep — stress keeps me up",
-        "I want to learn some calming techniques",
-        "I've been feeling low and unmotivated for a while",
-    ]
-    for s in starters:
-        if st.button(s, key=f"st_{s[:20]}"):
-            process_message(s)
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# ── Footer ──
-st.markdown("""<div class="footer">
-  Not a substitute for professional mental health care &nbsp;·&nbsp; Emergencies: call 911 &nbsp;·&nbsp; Powered by Groq
-</div>""", unsafe_allow_html=True)
