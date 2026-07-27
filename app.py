@@ -224,8 +224,7 @@ def process_message(text):
 st.markdown("""
 <div class="hero">
   <span class="hero-leaf">🌿</span>
-  <h1>MindEase</h1>
-  <p>A safe, judgment-free space to share what you're carrying.</p>
+  <h1>Welcome back to Mental Support</h1>
 </div>
 """, unsafe_allow_html=True)
 
@@ -237,8 +236,7 @@ if not st.session_state.messages:
         <div class="avatar bot">🌿</div>
         <div>
           <div class="bubble bot">
-            Hi, I'm glad you're here. This is a safe space — no judgment, just listening.<br><br>
-            Whatever you're feeling right now is valid. What's been on your mind lately?
+            Hi, I'm glad you're here.<br><br>
           </div>
         </div>
       </div>
