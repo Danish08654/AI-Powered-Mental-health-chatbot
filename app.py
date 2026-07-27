@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 st.set_page_config(
-    page_title="MindEase",
+    page_title="Mental-health-chatbot",
     page_icon="🌿",
     layout="centered"
 )
