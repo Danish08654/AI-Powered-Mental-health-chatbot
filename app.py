@@ -2,21 +2,15 @@ import streamlit as st
 import requests
 import time
 
-# ─────────────────────────────────────────
-# Page config
-# ─────────────────────────────────────────
 st.set_page_config(
-    page_title="MindEase – Mental Health Support",
+    page_title="MindEase",
     page_icon="🌿",
     layout="centered"
 )
 
-# ─────────────────────────────────────────
-# Custom CSS
-# ─────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Serif+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap');
 
 html, body, [data-testid="stAppViewContainer"] {
     background: #F0EDE6 !important;
@@ -24,165 +18,117 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 [data-testid="stHeader"] { background: transparent !important; }
 [data-testid="stToolbar"] { display: none; }
-.block-container { max-width: 760px !important; padding: 2rem 1.5rem 4rem !important; }
+[data-testid="stDecoration"] { display: none; }
+.block-container { max-width: 740px !important; padding: 2rem 1.5rem 4rem !important; }
 
-/* ── Hero ── */
-.hero { text-align: center; padding: 2.5rem 0 1.5rem; }
-.hero-icon {
-    font-size: 2.8rem; display: block; margin-bottom: 0.6rem;
-    animation: float 3s ease-in-out infinite;
-}
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-.hero h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2.4rem; color: #1C3A2E;
-    margin: 0 0 0.4rem; letter-spacing: -0.5px;
-}
-.hero p { font-size: 1rem; color: #5A7A6E; margin: 0; font-weight: 300; }
+/* Hero */
+.hero { text-align: center; padding: 2rem 0 1rem; }
+.hero-leaf { font-size: 2.2rem; display: block; margin-bottom: 0.5rem; animation: float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+.hero h1 { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: #1C3A2E; margin: 0 0 0.3rem; letter-spacing: -0.5px; }
+.hero p { font-size: 0.95rem; color: #5A7A6E; margin: 0; font-weight: 300; }
 
-/* ── Divider ── */
-.divider {
-    height: 1px;
-    background: linear-gradient(to right, transparent, #C8DDD5, transparent);
-    margin: 1.5rem 0;
-}
+/* Divider */
+.divider { height: 1px; background: linear-gradient(to right, transparent, #C8DDD5, transparent); margin: 1.2rem 0; }
 
-/* ── Chat bubbles ── */
-.chat-area { display: flex; flex-direction: column; gap: 14px; min-height: 100px; margin-bottom: 1rem; }
-.msg-row { display: flex; align-items: flex-end; gap: 10px; }
+/* Chat */
+.chat-area { display: flex; flex-direction: column; gap: 12px; margin-bottom: 1rem; }
+.msg-row { display: flex; align-items: flex-end; gap: 9px; }
 .msg-row.user { flex-direction: row-reverse; }
-.avatar {
-    width: 36px; height: 36px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1rem; flex-shrink: 0;
-}
-.avatar.bot { background: #C8DDD5; }
-.avatar.user-av { background: #D4C8E8; font-size: 0.75rem; font-weight: 600; color: #4A3878; }
-.bubble { max-width: 74%; border-radius: 18px; padding: 12px 16px; font-size: 0.92rem; line-height: 1.65; }
-.bubble.bot { background: #fff; border: 1px solid #E0EAE5; color: #1C3A2E; border-bottom-left-radius: 4px; }
-.bubble.user-bubble { background: #2E6651; color: #fff; border-bottom-right-radius: 4px; }
-.msg-time { font-size: 0.7rem; color: #9AB0A7; margin-top: 3px; padding: 0 4px; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; }
+.avatar.bot { background: #C8DDD5; font-size: 1rem; }
+.avatar.user-av { background: #D4C8E8; font-weight: 600; color: #4A3878; font-size: 0.7rem; }
+.bubble { max-width: 72%; border-radius: 16px; padding: 11px 15px; font-size: 0.91rem; line-height: 1.65; }
+.bubble.bot { background: #fff; border: 1px solid #E0EAE5; color: #1C3A2E; border-bottom-left-radius: 3px; }
+.bubble.user-bubble { background: #2E6651; color: #fff; border-bottom-right-radius: 3px; }
+.msg-time { font-size: 0.68rem; color: #9AB0A7; margin-top: 2px; padding: 0 3px; }
 .msg-row.user .msg-time { text-align: right; }
 
-/* ── Input ── */
-.stTextInput > div > div > input {
-    background: #fff !important; border: 1.5px solid #C8DDD5 !important;
-    border-radius: 12px !important; padding: 14px 18px !important;
-    font-size: 0.93rem !important; color: #1C3A2E !important;
-    font-family: 'DM Sans', sans-serif !important; box-shadow: none !important;
-}
-.stTextInput > div > div > input:focus {
-    border-color: #2E6651 !important;
-    box-shadow: 0 0 0 3px rgba(46,102,81,0.12) !important;
-}
-.stTextInput > div > div > input::placeholder { color: #9AB0A7 !important; }
-
-/* ── Buttons ── */
-.stButton > button {
-    background: #2E6651 !important; color: #fff !important;
-    border: none !important; border-radius: 10px !important;
-    padding: 10px 28px !important; font-family: 'DM Sans', sans-serif !important;
-    font-size: 0.9rem !important; font-weight: 500 !important;
-    transition: background 0.15s !important; width: 100% !important;
-}
-.stButton > button:hover { background: #1C3A2E !important; }
-
-/* ── Mood chips override ── */
+/* Mood chips — column buttons */
 div[data-testid="column"] .stButton > button {
     background: #fff !important; color: #2E6651 !important;
-    border: 1.5px solid #C8DDD5 !important; border-radius: 24px !important;
-    padding: 6px 10px !important; font-size: 0.78rem !important;
-    font-weight: 400 !important;
+    border: 1px solid #C8DDD5 !important; border-radius: 20px !important;
+    padding: 5px 8px !important; font-size: 0.76rem !important;
+    font-weight: 400 !important; width: 100% !important;
 }
 div[data-testid="column"] .stButton > button:hover {
     background: #2E6651 !important; color: #fff !important; border-color: #2E6651 !important;
 }
 
-/* ── Crisis banner ── */
+/* Send button */
+.stButton > button {
+    background: #2E6651 !important; color: #fff !important;
+    border: none !important; border-radius: 10px !important;
+    padding: 10px 20px !important; font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.88rem !important; font-weight: 500 !important; width: 100% !important;
+}
+.stButton > button:hover { background: #1C3A2E !important; }
+
+/* Input */
+.stTextInput > div > div > input {
+    background: #fff !important; border: 1px solid #C8DDD5 !important;
+    border-radius: 10px !important; padding: 12px 16px !important;
+    font-size: 0.92rem !important; color: #1C3A2E !important;
+    font-family: 'DM Sans', sans-serif !important; box-shadow: none !important;
+}
+.stTextInput > div > div > input:focus { border-color: #2E6651 !important; box-shadow: 0 0 0 2px rgba(46,102,81,0.1) !important; }
+.stTextInput > div > div > input::placeholder { color: #B0C4BB !important; }
+
+/* Crisis */
 .crisis-bar {
-    background: #FFF1F0; border: 1px solid #F5C4C4; border-radius: 10px;
-    padding: 12px 16px; font-size: 0.82rem; color: #922020;
-    margin: 1rem 0; display: flex; gap: 10px; align-items: flex-start;
+    background: #FFF1F0; border: 1px solid #F5C4C4; border-radius: 8px;
+    padding: 10px 14px; font-size: 0.81rem; color: #922020; margin: 0.8rem 0;
 }
 
-/* ── Model badge ── */
-.model-badge {
-    display: inline-block;
-    background: #E6F0EC; color: #1C3A2E;
-    border-radius: 20px; padding: 3px 12px;
-    font-size: 0.72rem; font-weight: 500;
-    margin-bottom: 0.5rem;
-}
-
-/* ── Sidebar ── */
-[data-testid="stSidebar"] { background: #E8E3DA !important; }
+/* Sidebar — minimal */
+[data-testid="stSidebar"] { background: #EAE6DF !important; }
 [data-testid="stSidebar"] label,
 [data-testid="stSidebar"] p,
-[data-testid="stSidebar"] h2,
-[data-testid="stSidebar"] h3 {
-    color: #1C3A2E !important; font-family: 'DM Sans', sans-serif !important;
-}
+[data-testid="stSidebar"] h3 { color: #1C3A2E !important; font-family: 'DM Sans', sans-serif !important; font-size: 0.88rem !important; }
 [data-testid="stSidebar"] .stButton > button {
-    background: #fff !important; color: #922020 !important;
-    border: 1px solid #F5C4C4 !important; border-radius: 8px !important;
+    background: transparent !important; color: #7A3030 !important;
+    border: 1px solid #E8C4C4 !important; border-radius: 7px !important;
+    font-size: 0.83rem !important;
 }
-[data-testid="stSidebar"] .stButton > button:hover {
-    background: #FFF1F0 !important;
-}
+[data-testid="stSidebar"] .stButton > button:hover { background: #FFF1F0 !important; }
 
-/* ── Quick starter buttons ── */
-.starter-btn .stButton > button {
+/* Starters */
+.starter-wrap .stButton > button {
     background: #fff !important; color: #2E6651 !important;
-    border: 1px solid #C8DDD5 !important; border-radius: 10px !important;
-    text-align: left !important; font-size: 0.85rem !important;
-    padding: 10px 16px !important;
+    border: 1px solid #D8E8E2 !important; border-radius: 8px !important;
+    text-align: left !important; font-size: 0.84rem !important;
+    padding: 9px 14px !important; font-weight: 400 !important;
 }
-.starter-btn .stButton > button:hover {
-    background: #E6F0EC !important; border-color: #2E6651 !important;
-}
+.starter-wrap .stButton > button:hover { background: #EAF3EE !important; border-color: #2E6651 !important; }
 
-/* ── Footer ── */
-.footer {
-    text-align: center; font-size: 0.75rem; color: #9AB0A7;
-    margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #D8E4DE;
-}
+/* Footer */
+.footer { text-align: center; font-size: 0.72rem; color: #B0C4BB; margin-top: 1.5rem; padding-top: 0.8rem; border-top: 1px solid #DDE8E3; }
 </style>
 """, unsafe_allow_html=True)
 
-# ─────────────────────────────────────────
-# Load API key from st.secrets
-# ─────────────────────────────────────────
+# ── API key from secrets ──
 try:
     GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 except (KeyError, FileNotFoundError):
     GROQ_API_KEY = None
 
-# ─────────────────────────────────────────
-# Models — best for empathetic / psychological conversation
-# ─────────────────────────────────────────
 MODELS = {
-    "🧠 Llama 3.3 70B  (best quality)":   "llama-3.3-70b-versatile",
-    "⚡ Llama 3.1 8B   (fastest)":         "llama-3.1-8b-instant",
-    "🌀 DeepSeek R1 70B (reasoning)":      "deepseek-r1-distill-llama-70b",
-    "💎 Llama 4 Maverick (multimodal)":    "meta-llama/llama-4-maverick-17b-128e-instruct",
-    "🔮 Gemma 2 9B      (balanced)":       "gemma2-9b-it",
+    "Llama 3.3 70B":        "llama-3.3-70b-versatile",
+    "Llama 3.1 8B (fast)":  "llama-3.1-8b-instant",
+    "DeepSeek R1 70B":      "deepseek-r1-distill-llama-70b",
+    "Gemma 2 9B":           "gemma2-9b-it",
 }
 
-# ─────────────────────────────────────────
-# System prompt  — tuned for mental health
-# ─────────────────────────────────────────
-SYSTEM_PROMPT = """You are MindEase, a compassionate and trauma-informed mental health support companion trained in active listening, cognitive-behavioural principles, and mindfulness-based techniques.
+SYSTEM_PROMPT = """You are MindEase, a compassionate and trauma-informed mental health support companion.
 
 Core behaviour:
-- Always validate and reflect feelings FIRST before any suggestion
-- Keep replies warm, conversational, and concise (2–3 short paragraphs)
-- Ask exactly ONE thoughtful follow-up question per reply
-- Offer evidence-based coping tools (box breathing, 5-4-3-2-1 grounding, progressive muscle relaxation, journaling prompts, behavioural activation) when genuinely helpful
-- Never diagnose, prescribe medication, or claim to replace a licensed therapist
-- Acknowledge cultural differences in expressing distress without assumptions
-- If the user mentions self-harm, suicidal thoughts, or a crisis, respond with care and compassion, take it seriously, and clearly provide: 988 Suicide & Crisis Lifeline (call/text 988, US), Crisis Text Line (text HOME to 741741), and International Association for Suicide Prevention directory at https://www.iasp.info/resources/Crisis_Centres/
-- Use plain, warm language — never clinical jargon or bullet-point lists in your reply
-- If the user seems to be a minor, be extra gentle and recommend involving a trusted adult"""
+- Validate and reflect the user's feelings first, before anything else
+- Be warm, concise, and conversational — 2 to 3 short paragraphs maximum
+- Ask exactly one thoughtful follow-up question per reply
+- Offer evidence-based coping tools (box breathing, 5-4-3-2-1 grounding, journaling, progressive muscle relaxation) only when genuinely relevant
+- Never diagnose, prescribe, or claim to replace a licensed therapist
+- If the user mentions self-harm or suicidal thoughts, respond with care and provide: 988 Suicide & Crisis Lifeline (call or text 988), Crisis Text Line (text HOME to 741741)
+- Write in plain, warm prose — no bullet points, no clinical language, no lists"""
 
 CRISIS_WORDS = [
     "suicide", "suicidal", "kill myself", "end my life", "self-harm", "self harm",
@@ -190,125 +136,101 @@ CRISIS_WORDS = [
     "cutting myself", "overdose", "no reason to live"
 ]
 
-# ─────────────────────────────────────────
-# Session state
-# ─────────────────────────────────────────
-for key, default in [("messages", []), ("show_crisis", False), ("msg_count", 0)]:
-    if key not in st.session_state:
-        st.session_state[key] = default
+for k, v in [("messages", []), ("show_crisis", False)]:
+    if k not in st.session_state:
+        st.session_state[k] = v
 
-# ─────────────────────────────────────────
-# Sidebar
-# ─────────────────────────────────────────
+# ── Sidebar ──
 with st.sidebar:
-    st.markdown("### ⚙️ Settings")
+    st.markdown("### Settings")
 
-    # API key — prefer secrets, allow manual override
     if GROQ_API_KEY:
-        st.success("✅ API key loaded from secrets")
+        st.success("API key loaded")
         active_key = GROQ_API_KEY
     else:
-        manual_key = st.text_input(
-            "Groq API Key", type="password",
-            placeholder="gsk_…",
-            help="Add to .streamlit/secrets.toml as GROQ_API_KEY or enter here"
-        )
-        active_key = manual_key if manual_key else None
+        manual_key = st.text_input("Groq API Key", type="password", placeholder="gsk_…")
+        active_key = manual_key or None
         if not active_key:
-            st.warning("Enter your Groq API key to start chatting.")
+            st.caption("Enter your key to start. Get one free at console.groq.com")
 
     model_label = st.selectbox("Model", list(MODELS.keys()), index=0)
     model_id = MODELS[model_label]
 
-    temperature = st.slider(
-        "Response warmth", 0.3, 1.0, 0.72, 0.05,
-        help="Higher = more expressive and creative responses"
-    )
+    temperature = st.slider("Warmth", 0.3, 1.0, 0.72, 0.05)
 
     st.markdown("---")
-    st.markdown("### 🆘 Crisis Resources")
-    st.markdown("""
-- **988** — Suicide & Crisis Lifeline *(call or text)*  
-- **741741** — Crisis Text Line *(text HOME)*  
-- **911** — Emergencies  
-- [International crisis centres](https://www.iasp.info/resources/Crisis_Centres/)
-    """)
+    st.markdown("**Crisis lines**")
+    st.caption("988 — Suicide & Crisis Lifeline\n\n741741 — Crisis Text Line (text HOME)\n\n911 — Emergencies")
     st.markdown("---")
-    if st.button("🗑 Clear conversation"):
+    if st.button("Clear conversation"):
         st.session_state.messages = []
         st.session_state.show_crisis = False
-        st.session_state.msg_count = 0
         st.rerun()
 
-# ─────────────────────────────────────────
-# Groq API call
-# ─────────────────────────────────────────
+# ── Groq call ──
 def call_groq(messages, api_key, model, temp):
-    url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-    # Groq uses "assistant" role; remap "bot" if any legacy key slipped through
-    groq_msgs = []
-    for m in messages:
-        role = "assistant" if m["role"] in ("bot", "assistant") else "user"
-        groq_msgs.append({"role": role, "content": m["content"]})
+    groq_msgs = [
+        {"role": "assistant" if m["role"] == "assistant" else "user", "content": m["content"]}
+        for m in messages
+    ]
     payload = {
         "model": model,
         "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + groq_msgs,
         "temperature": temp,
-        "max_tokens": 700,
-        "stream": False,
+        "max_tokens": 600,
     }
-    resp = requests.post(url, headers=headers, json=payload, timeout=30)
+    resp = requests.post("https://api.groq.com/openai/v1/chat/completions",
+                         headers=headers, json=payload, timeout=30)
     resp.raise_for_status()
     return resp.json()["choices"][0]["message"]["content"]
 
-# ─────────────────────────────────────────
-# Render chat history
-# ─────────────────────────────────────────
+# ── Render messages ──
 def render_messages():
     html = '<div class="chat-area">'
     for msg in st.session_state.messages:
         t = time.strftime("%I:%M %p")
-        content = msg["content"].replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
+        c = msg["content"].replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
         if msg["role"] == "user":
-            html += f"""
-            <div class="msg-row user">
-              <div class="avatar user-av">You</div>
-              <div>
-                <div class="bubble user-bubble">{content}</div>
-                <div class="msg-time">{t}</div>
-              </div>
-            </div>"""
+            html += f'<div class="msg-row user"><div class="avatar user-av">You</div><div><div class="bubble user-bubble">{c}</div><div class="msg-time">{t}</div></div></div>'
         else:
-            html += f"""
-            <div class="msg-row">
-              <div class="avatar bot">🌿</div>
-              <div>
-                <div class="bubble bot">{content}</div>
-                <div class="msg-time">{t}</div>
-              </div>
-            </div>"""
+            html += f'<div class="msg-row"><div class="avatar bot">🌿</div><div><div class="bubble bot">{c}</div><div class="msg-time">{t}</div></div></div>'
     html += "</div>"
     st.markdown(html, unsafe_allow_html=True)
 
-# ─────────────────────────────────────────
-# Hero
-# ─────────────────────────────────────────
+# ── Process message ──
+def process_message(text):
+    if not active_key:
+        st.error("Enter your Groq API key in the sidebar.")
+        return
+    if any(kw in text.lower() for kw in CRISIS_WORDS):
+        st.session_state.show_crisis = True
+    st.session_state.messages.append({"role": "user", "content": text})
+    with st.spinner(""):
+        try:
+            reply = call_groq(st.session_state.messages, active_key, model_id, temperature)
+            st.session_state.messages.append({"role": "assistant", "content": reply})
+        except requests.exceptions.HTTPError as e:
+            st.session_state.messages.pop()
+            code = e.response.status_code
+            msgs = {401: "Invalid API key.", 429: "Rate limit hit — wait a moment.", 404: f"Model '{model_id}' unavailable on your plan."}
+            st.error(msgs.get(code, f"API error {code}."))
+        except Exception as e:
+            st.session_state.messages.pop()
+            st.error(f"Something went wrong: {e}")
+    st.rerun()
+
+# ── Hero ──
 st.markdown("""
 <div class="hero">
-  <span class="hero-icon">🌿</span>
+  <span class="hero-leaf">🌿</span>
   <h1>MindEase</h1>
   <p>A safe, judgment-free space to share what you're carrying.</p>
 </div>
 """, unsafe_allow_html=True)
 
-# Model badge
-st.markdown(f'<div style="text-align:center"><span class="model-badge">✦ {model_label.split("(")[0].strip()}</span></div>', unsafe_allow_html=True)
-
-# ─────────────────────────────────────────
-# Mood chips
-# ─────────────────────────────────────────
-moods = ["😔 Sad", "😰 Anxious", "😤 Frustrated", "🌊 Overwhelmed", "😶 Numb", "🌱 Hopeful"]
+# ── Mood chips ──
+moods = ["Sad", "Anxious", "Frustrated", "Overwhelmed", "Numb", "Hopeful"]
 mood_cols = st.columns(len(moods))
 selected_mood = None
 for i, mood in enumerate(moods):
@@ -316,26 +238,18 @@ for i, mood in enumerate(moods):
         if st.button(mood, key=f"mood_{i}", use_container_width=True):
             selected_mood = mood
 
-# ─────────────────────────────────────────
-# Crisis banner
-# ─────────────────────────────────────────
+# ── Crisis banner ──
 if st.session_state.show_crisis:
-    st.markdown("""
-    <div class="crisis-bar">
-      🆘 <span>If you're in crisis or having thoughts of self-harm, please reach out now.
-      <strong>Call or text 988</strong> (US Suicide & Crisis Lifeline) ·
-      Text <strong>HOME to 741741</strong> (Crisis Text Line) ·
-      <a href="https://www.iasp.info/resources/Crisis_Centres/" target="_blank" style="color:#922020">International crisis centres</a>.
-      You matter and support is available right now.</span>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("""<div class="crisis-bar">
+      If you're in crisis, please reach out now.
+      <strong>Call or text 988</strong> (US Suicide & Crisis Lifeline) &nbsp;·&nbsp;
+      Text <strong>HOME to 741741</strong> (Crisis Text Line).
+      You matter and support is available right now.
+    </div>""", unsafe_allow_html=True)
 
-# ─────────────────────────────────────────
-# Chat area
-# ─────────────────────────────────────────
+# ── Chat area ──
 if not st.session_state.messages:
-    st.markdown("""
-    <div class="chat-area">
+    st.markdown("""<div class="chat-area">
       <div class="msg-row">
         <div class="avatar bot">🌿</div>
         <div>
@@ -345,98 +259,43 @@ if not st.session_state.messages:
           </div>
         </div>
       </div>
-    </div>
-    """, unsafe_allow_html=True)
+    </div>""", unsafe_allow_html=True)
 else:
     render_messages()
 
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 
-# ─────────────────────────────────────────
-# Input area
-# ─────────────────────────────────────────
+# ── Input ──
 col_input, col_btn = st.columns([5, 1])
 with col_input:
-    user_input = st.text_input(
-        label="message", label_visibility="collapsed",
-        placeholder="Share what's on your mind…", key="user_input"
-    )
+    user_input = st.text_input("message", label_visibility="collapsed",
+                               placeholder="Share what's on your mind…", key="user_input")
 with col_btn:
-    send = st.button("Send ↗")
+    send = st.button("Send")
 
-# Mood chip triggers send
 if selected_mood:
     user_input = f"I'm feeling {selected_mood} today"
     send = True
 
-# ─────────────────────────────────────────
-# Process message
-# ─────────────────────────────────────────
-def process_message(text):
-    if not active_key:
-        st.error("Please enter your Groq API key in the sidebar.")
-        return
-
-    if any(kw in text.lower() for kw in CRISIS_WORDS):
-        st.session_state.show_crisis = True
-
-    st.session_state.messages.append({"role": "user", "content": text})
-    st.session_state.msg_count += 1
-
-    with st.spinner("MindEase is listening…"):
-        try:
-            reply = call_groq(st.session_state.messages, active_key, model_id, temperature)
-            st.session_state.messages.append({"role": "assistant", "content": reply})
-        except requests.exceptions.HTTPError as e:
-            st.session_state.messages.pop()
-            code = e.response.status_code
-            if code == 401:
-                st.error("Invalid Groq API key — please check your key in the sidebar.")
-            elif code == 429:
-                st.error("Rate limit reached. Wait a moment and try again.")
-            elif code == 404:
-                st.error(f"Model '{model_id}' not found on your Groq plan. Try a different model.")
-            else:
-                st.error(f"API error {code}. Please try again.")
-        except requests.exceptions.ConnectionError:
-            st.session_state.messages.pop()
-            st.error("Couldn't reach Groq. Check your internet connection.")
-        except Exception as e:
-            st.session_state.messages.pop()
-            st.error(f"Something went wrong: {str(e)}")
-
-    st.rerun()
-
 if send and user_input and user_input.strip():
     process_message(user_input.strip())
 
-# ─────────────────────────────────────────
-# Quick starters (empty state only)
-# ─────────────────────────────────────────
+# ── Quick starters (empty state only) ──
 if not st.session_state.messages:
-    st.markdown("**Not sure where to start? Try one of these:**")
+    st.markdown('<div class="starter-wrap">', unsafe_allow_html=True)
     starters = [
-        "I've been feeling really anxious and can't slow my thoughts down",
+        "I've been feeling anxious and can't slow my thoughts down",
         "I feel lonely and disconnected from the people around me",
-        "I'm exhausted but can't sleep — stress keeps me up at night",
-        "I want to learn some calming techniques for when I feel overwhelmed",
-        "I've been feeling low and unmotivated for a while now",
+        "I'm exhausted but can't sleep — stress keeps me up",
+        "I want to learn some calming techniques",
+        "I've been feeling low and unmotivated for a while",
     ]
     for s in starters:
-        if st.button(f"💬  {s}", key=f"start_{s[:25]}"):
+        if st.button(s, key=f"st_{s[:20]}"):
             process_message(s)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# ─────────────────────────────────────────
-# Conversation depth nudge (every 8 turns)
-# ─────────────────────────────────────────
-if st.session_state.msg_count > 0 and st.session_state.msg_count % 8 == 0:
-    st.info("💙 You've been sharing openly — that takes courage. If these feelings are persistent, speaking with a licensed therapist can offer deeper support.")
-
-# ─────────────────────────────────────────
-# Footer
-# ─────────────────────────────────────────
-st.markdown("""
-<div class="footer">
-  MindEase is not a substitute for professional mental health care. · For emergencies call 911. · Powered by Groq
-</div>
-""", unsafe_allow_html=True)
+# ── Footer ──
+st.markdown("""<div class="footer">
+  Not a substitute for professional mental health care &nbsp;·&nbsp; Emergencies: call 911 &nbsp;·&nbsp; Powered by Groq
+</div>""", unsafe_allow_html=True)
