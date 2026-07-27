@@ -247,6 +247,3 @@ with col_input:
     placeholder="Share what's on your mind…", key="user_input")
 with col_btn:
     send = st.button("Send")
-
-if send and user_input and user_input.strip():
-    process_message(user_input.strip())
