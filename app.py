@@ -236,7 +236,7 @@ if not st.session_state.messages:
         <div class="avatar bot">🌿</div>
         <div>
           <div class="bubble bot">
-            Hi, How can i help you?<br>
+            Hi, How can i help you?
           </div>
         </div>
       </div>
