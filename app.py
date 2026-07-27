@@ -273,7 +273,6 @@ st.markdown("""
 
 # Model badge
 st.markdown(f'<div style="text-align:center"><span class="model-badge">✦ {model_label.split("(")[0].strip()}</span></div>', unsafe_allow_html=True)
-
 # ─────────────────────────────────────────
 # Mood chips
 # ─────────────────────────────────────────
