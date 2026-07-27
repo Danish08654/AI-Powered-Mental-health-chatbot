@@ -188,7 +188,6 @@ def call_groq(messages, api_key, model, temp):
 def render_messages():
     html = '<div class="chat-area">'
     for msg in st.session_state.messages:
-        t = time.strftime("%I:%M %p")
         c = msg["content"].replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
         if msg["role"] == "user":
             html += f'<div class="msg-row user"><div class="avatar user-av">You</div><div><div class="bubble user-bubble">{c}</div><div class="msg-time">{t}</div></div></div>'
@@ -242,7 +241,6 @@ if not st.session_state.messages:
     </div>""", unsafe_allow_html=True)
 else:
     render_messages()
-
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 
 # ── Input ──
