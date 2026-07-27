@@ -1,4 +1,4 @@
-#  Mental Health Support Chatbot (LLM)
+#  Mental Health Support Chatbot 
 
 A fine-tuned AI chatbot that provides empathetic responses for mental health support using simple Plain English text.
 
