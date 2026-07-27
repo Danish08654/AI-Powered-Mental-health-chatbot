@@ -258,9 +258,3 @@ with col_btn:
 
 if send and user_input and user_input.strip():
     process_message(user_input.strip())
-
-
-# ── Footer ──
-st.markdown("""<div class="footer">
-  Not a substitute for professional mental health care &nbsp;·&nbsp; Emergencies: call 911 &nbsp;·&nbsp; Powered by Groq
-</div>""", unsafe_allow_html=True)
