@@ -113,8 +113,6 @@ except (KeyError, FileNotFoundError):
 MODELS = {
     "Llama 3.3 70B":        "llama-3.3-70b-versatile",
     "Llama 3.1 8B (fast)":  "llama-3.1-8b-instant",
-    "DeepSeek R1 70B":      "deepseek-r1-distill-llama-70b",
-    "Gemma 2 9B":           "gemma2-9b-it",
 }
 
 SYSTEM_PROMPT = """You are MindEase, a compassionate and trauma-informed mental health support companion.
@@ -246,7 +244,7 @@ st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 col_input, col_btn = st.columns([5, 1])
 with col_input:
     user_input = st.text_input("message", label_visibility="collapsed",
-                               placeholder="Share what's on your mind…", key="user_input")
+    placeholder="Share what's on your mind…", key="user_input")
 with col_btn:
     send = st.button("Send")
 
