@@ -40,8 +40,7 @@ html, body, [data-testid="stAppViewContainer"] {
 .bubble { max-width: 72%; border-radius: 16px; padding: 11px 15px; font-size: 0.91rem; line-height: 1.65; }
 .bubble.bot { background: #fff; border: 1px solid #E0EAE5; color: #1C3A2E; border-bottom-left-radius: 3px; }
 .bubble.user-bubble { background: #2E6651; color: #fff; border-bottom-right-radius: 3px; }
-.msg-time { font-size: 0.68rem; color: #9AB0A7; margin-top: 2px; padding: 0 3px; }
-.msg-row.user .msg-time { text-align: right; }
+
 
 /* Mood chips — column buttons */
 div[data-testid="column"] .stButton > button {
@@ -190,9 +189,9 @@ def render_messages():
     for msg in st.session_state.messages:
         c = msg["content"].replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
         if msg["role"] == "user":
-            html += f'<div class="msg-row user"><div class="avatar user-av">You</div><div><div class="bubble user-bubble">{c}</div><div class="msg-time">{t}</div></div></div>'
+            html += f'<div class="msg-row user"><div class="avatar user-av">You</div><div><div class="bubble user-bubble">{c}</div></div></div>'
         else:
-            html += f'<div class="msg-row"><div class="avatar bot">🌿</div><div><div class="bubble bot">{c}</div><div class="msg-time">{t}</div></div></div>'
+            html += f'<div class="msg-row"><div class="avatar bot">🌿</div><div><div class="bubble bot">{c}</div></div></div>'
     html += "</div>"
     st.markdown(html, unsafe_allow_html=True)
 
@@ -222,10 +221,28 @@ def process_message(text):
 st.markdown("""
 <div class="hero">
   <span class="hero-leaf">🌿</span>
-  <h1>Welcome back to Mental Support</h1>
+  <h1>MindEase</h1>
+  <p>A safe, judgment-free space to share what you're carrying.</p>
 </div>
 """, unsafe_allow_html=True)
 
+# ── Mood chips ──
+moods = ["Sad", "Anxious", "Frustrated", "Overwhelmed", "Numb", "Hopeful"]
+mood_cols = st.columns(len(moods))
+selected_mood = None
+for i, mood in enumerate(moods):
+    with mood_cols[i]:
+        if st.button(mood, key=f"mood_{i}", use_container_width=True):
+            selected_mood = mood
+
+# ── Crisis banner ──
+if st.session_state.show_crisis:
+    st.markdown("""<div class="crisis-bar">
+      If you're in crisis, please reach out now.
+      <strong>Call or text 988</strong> (US Suicide & Crisis Lifeline) &nbsp;·&nbsp;
+      Text <strong>HOME to 741741</strong> (Crisis Text Line).
+      You matter and support is available right now.
+    </div>""", unsafe_allow_html=True)
 
 # ── Chat area ──
 if not st.session_state.messages:
@@ -234,13 +251,15 @@ if not st.session_state.messages:
         <div class="avatar bot">🌿</div>
         <div>
           <div class="bubble bot">
-            Hi, How can i help you?
+            Hi, I'm glad you're here. This is a safe space — no judgment, just listening.<br><br>
+            Whatever you're feeling right now is valid. What's been on your mind lately?
           </div>
         </div>
       </div>
     </div>""", unsafe_allow_html=True)
 else:
     render_messages()
+
 st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 
 # ── Input ──
@@ -251,5 +270,29 @@ with col_input:
 with col_btn:
     send = st.button("Send")
 
+if selected_mood:
+    user_input = f"I'm feeling {selected_mood} today"
+    send = True
+
 if send and user_input and user_input.strip():
     process_message(user_input.strip())
+
+# ── Quick starters (empty state only) ──
+if not st.session_state.messages:
+    st.markdown('<div class="starter-wrap">', unsafe_allow_html=True)
+    starters = [
+        "I've been feeling anxious and can't slow my thoughts down",
+        "I feel lonely and disconnected from the people around me",
+        "I'm exhausted but can't sleep — stress keeps me up",
+        "I want to learn some calming techniques",
+        "I've been feeling low and unmotivated for a while",
+    ]
+    for s in starters:
+        if st.button(s, key=f"st_{s[:20]}"):
+            process_message(s)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# ── Footer ──
+st.markdown("""<div class="footer">
+  Not a substitute for professional mental health care &nbsp;·&nbsp; Emergencies: call 911 &nbsp;·&nbsp; Powered by Groq
+</div>""", unsafe_allow_html=True)
