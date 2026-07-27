@@ -232,8 +232,7 @@ if not st.session_state.messages:
         <div class="avatar bot">🌿</div>
         <div>
           <div class="bubble bot">
-            Hi, I'm glad you're here. This is a safe space — no judgment, just listening.<br><br>
-            Whatever you're feeling right now is valid. What's been on your mind lately?
+            Hi, How can i help you?
           </div>
         </div>
       </div>
