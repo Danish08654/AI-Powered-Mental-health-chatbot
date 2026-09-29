@@ -111,8 +111,7 @@ except (KeyError, FileNotFoundError):
     GROQ_API_KEY = None
 
 MODELS = {
-    "Llama 3.3 70B":        "llama-3.3-70b-versatile",
-    "Llama 3.1 8B (fast)":  "llama-3.1-8b-instant",
+        model="openai/gpt-oss-20b",
 }
 
 SYSTEM_PROMPT = """You are MindEase, a compassionate and trauma-informed mental health support companion.
