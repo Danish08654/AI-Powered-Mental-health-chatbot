@@ -111,7 +111,7 @@ except (KeyError, FileNotFoundError):
     GROQ_API_KEY = None
 
 MODELS = {
-        model="openai/gpt-oss-20b",
+        model="openai/gpt-oss-20b"
 }
 
 SYSTEM_PROMPT = """You are MindEase, a compassionate and trauma-informed mental health support companion.
