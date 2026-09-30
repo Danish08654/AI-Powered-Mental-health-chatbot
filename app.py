@@ -150,7 +150,6 @@ with st.sidebar:
 
     model_label = st.selectbox("Model", list(MODELS.keys()), index=0)
     model_id = MODELS[model_label]
-
     temperature = st.slider("Warmth", 0.3, 1.0, 0.72, 0.05)
 
     st.markdown("---")
